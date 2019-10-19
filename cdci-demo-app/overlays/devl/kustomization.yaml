@@ -1,0 +1,7 @@
+commonLabels:
+  app: cdci-demo-app
+
+bases:
+- ../../base
+
+namespace: my-namespace-devl

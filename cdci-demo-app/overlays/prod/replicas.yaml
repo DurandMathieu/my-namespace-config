@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-demo-app
+spec:
+  replicas: 4
+  template:
+    spec:
+      containers:
+        - name: cicd-demo-app-container
+          resources:
+            limits:
+              memory: 1250Mi
+            requests:
+              memory: 1250Mi

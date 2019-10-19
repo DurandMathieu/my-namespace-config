@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-demo-app
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: cicd-demo-app-container
+        image: matdurand/cicd-demo-app:1.0.0-master-latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000

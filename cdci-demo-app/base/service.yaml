@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cicd-demo-app
+spec:
+  ports:
+    - port: 3000
+  selector:
+    app: cicd-demo-app
+  type: LoadBalancer
