@@ -8,3 +8,8 @@ namespace: my-namespace-prod
 
 patchesStrategicMerge:
 - replicas.yaml
+
+secretGenerator:
+- name: cicd-demo-app-secrets
+  envs:
+  - secrets.env
