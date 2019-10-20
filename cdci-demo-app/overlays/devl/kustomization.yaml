@@ -5,3 +5,8 @@ bases:
 - ../../base
 
 namespace: my-namespace-devl
+
+secretGenerator:
+- name: cicd-demo-app-secrets
+  envs:
+  - secrets.env

@@ -12,3 +12,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
+        env:
+        - name: SECRET_CARAMILK
+          valueFrom:
+            secretKeyRef:
+              name: cicd-demo-app-secrets
+              key: caramilk_secret
