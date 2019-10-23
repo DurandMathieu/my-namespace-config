@@ -1,3 +1,8 @@
 resources:
 - deployment.yaml
 - service.yaml
+
+configMapGenerator:
+- name: cicd-demo-app-configmap
+  literals:
+  - SECRET_FILE=/var/secrets/secrets.json

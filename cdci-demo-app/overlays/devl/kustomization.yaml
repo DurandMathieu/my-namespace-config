@@ -10,3 +10,5 @@ secretGenerator:
 - name: cicd-demo-app-secrets
   envs:
   - secrets.env
+  files:
+  - secrets.json
