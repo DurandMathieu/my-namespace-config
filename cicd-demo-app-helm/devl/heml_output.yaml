@@ -1,0 +1,100 @@
+---
+# Source: cicd-demo-app-chart/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app: cicd-demo-app-chart
+  name: cicd-demo-app-chart-secrets
+type: Opaque
+data:
+  caramilk_secret: "c3VwZXIgc2VjcmV0IG92ZXJyaWRlIG15LW5hbWVzcGFjZS1kZXZs"
+
+---
+# Source: cicd-demo-app-chart/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cicd-demo-app-chart-configmap
+data:
+  SECRET_FILE: /var/secrets/secrets.json
+
+---
+# Source: cicd-demo-app-chart/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-cicd-demo-app-chart
+  labels:
+    app.kubernetes.io/name: cicd-demo-app-chart
+    helm.sh/chart: cicd-demo-app-chart-1.0.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: cicd-demo-app-chart
+    app.kubernetes.io/instance: release-name
+
+---
+# Source: cicd-demo-app-chart/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-cicd-demo-app-chart
+  labels:
+    app.kubernetes.io/name: cicd-demo-app-chart
+    helm.sh/chart: cicd-demo-app-chart-1.0.0
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: Tiller
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cicd-demo-app-chart
+      app.kubernetes.io/instance: release-name
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cicd-demo-app-chart
+        app.kubernetes.io/instance: release-name
+    spec:
+      containers:
+      - name: cicd-demo-app-chart
+        image: "matdurand/cicd-demo-app:1.1.1-master-latest"
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: cicd-demo-app-chart-secrets-volume
+          mountPath: "/var/secrets"
+          readOnly: true
+        ports:
+          - name: http
+            containerPort: 3000
+            protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: cicd-demo-app-chart-configmap
+        env:
+        - name: SECRET_CARAMILK
+          valueFrom:
+            secretKeyRef:
+              name: cicd-demo-app-chart-secrets
+              key: caramilk_secret
+        resources:
+            limits:
+              memory: 1250Mi
+            requests:
+              memory: 1250Mi
+            
+      volumes:
+      - name: cicd-demo-app-chart-secrets-volume
+        secret:
+          secretName: cicd-demo-app-chart-secrets
+
